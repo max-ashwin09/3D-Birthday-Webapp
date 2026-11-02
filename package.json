@@ -1,0 +1,9 @@
+{
+  "name": "birthday-webapp",
+  "version": "1.0.0",
+  "description": "Arman Bhai 3D Birthday Webapp",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site ready'"
+  }
+}
