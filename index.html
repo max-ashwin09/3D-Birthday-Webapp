@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! 🎉🎂</title>
+  <meta name="description" content="An interactive, celebration-filled Birthday Web Application">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for Confetti & Particles -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Ambient Floating Balloons Background -->
+  <div class="balloon-container" id="balloon-container"></div>
+
+  <!-- Audio Control Button -->
+  <div class="music-toggle" id="music-toggle" title="Play / Pause Birthday Music">
+    <i class="fa-solid fa-volume-xmark" id="music-icon"></i>
+    <span class="music-label">Birthday Tune</span>
+  </div>
+
+  <!-- Customize Name Modal Trigger -->
+  <button class="settings-btn" id="open-settings-btn" title="Personalize Wish">
+    <i class="fa-solid fa-wand-magic-sparkles"></i> Customize
+  </button>
+
+  <main class="main-container">
+    <!-- Header Hero Section -->
+    <header class="hero-section">
+      <div class="badge">✨ Today is a Special Day ✨</div>
+      <h1 class="main-title">
+        Happy Birthday, <span class="highlight-name" id="display-name">Bestie</span>!
+      </h1>
+      <p class="subtitle" id="display-tagline">
+        Wishing you a year filled with endless laughter, boundless adventures, and dreams turned into reality!
+      </p>
+    </header>
+
+    <!-- Celebration Stages Grid -->
+    <div class="stages-grid">
+      
+      <!-- Stage 1: Interactive Birthday Cake -->
+      <section class="card-glass cake-stage">
+        <div class="stage-header">
+          <span class="stage-tag"><i class="fa-solid fa-cake-candles"></i> Stage 1</span>
+          <h2>Make a Wish & Blow the Candles</h2>
+        </div>
+        
+        <div class="cake-container" id="cake">
+          <div class="plate"></div>
+          <div class="layer layer-bottom"></div>
+          <div class="layer layer-middle"></div>
+          <div class="layer layer-top">
+            <div class="frosting"></div>
+          </div>
+          <div class="candles-wrap">
+            <div class="candle" data-lit="true">
+              <div class="flame"></div>
+            </div>
+            <div class="candle" data-lit="true">
+              <div class="flame"></div>
+            </div>
+            <div class="candle" data-lit="true">
+              <div class="flame"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-action">
+          <button class="btn btn-primary" id="blow-candles-btn">
+            <i class="fa-solid fa-wind"></i> Blow Out Candles
+          </button>
+          <p class="hint-text">Click the button or click directly on the flames!</p>
+        </div>
+      </section>
+
+      <!-- Stage 2: Interactive 3D Greeting Card -->
+      <section class="card-glass card-stage">
+        <div class="stage-header">
+          <span class="stage-tag"><i class="fa-solid fa-envelope-open-text"></i> Stage 2</span>
+          <h2>Open Your Birthday Card</h2>
+        </div>
+
+        <div class="birthday-card-wrapper" id="card-wrapper">
+          <div class="birthday-card" id="birthday-card">
+            <!-- Front of the Card -->
+            <div class="card-front">
+              <div class="card-front-content">
+                <i class="fa-solid fa-gift card-icon"></i>
+                <h3>For You</h3>
+                <p>Click to open card</p>
+                <div class="ribbon-decor">🎀</div>
+              </div>
+            </div>
+            <!-- Inside of the Card -->
+            <div class="card-inside">
+              <div class="card-inside-content">
+                <h3>Dear <span class="card-inside-name">Friend</span>,</h3>
+                <p id="card-message">
+                  On this joyful day, may your heart be as light as a balloon and your smiles as sweet as cake. Thank you for bringing so much light and positive energy into our lives!
+                </p>
+                <div class="card-signature">
+                  <span>With lots of love,</span>
+                  <strong>❤️ Your Friends & Family</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-action">
+          <button class="btn btn-outline" id="toggle-card-btn">
+            <i class="fa-solid fa-envelope"></i> Open / Close Card
+          </button>
+        </div>
+      </section>
+
+      <!-- Stage 3: Mystery Gift Box -->
+      <section class="card-glass gift-stage">
+        <div class="stage-header">
+          <span class="stage-tag"><i class="fa-solid fa-box-open"></i> Stage 3</span>
+          <h2>Unwrap Your Birthday Surprise</h2>
+        </div>
+
+        <div class="gift-box-container" id="gift-box">
+          <div class="gift-lid">
+            <div class="gift-bow"></div>
+          </div>
+          <div class="gift-body"></div>
+          <div class="gift-surprise" id="gift-surprise">
+            <div class="surprise-icon">🎁</div>
+            <h4>Surprise Unlocked!</h4>
+            <p>100x Happiness & Unlimited Good Vibes Guaranteed for this entire year!</p>
+          </div>
+        </div>
+
+        <div class="stage-action">
+          <button class="btn btn-secondary" id="open-gift-btn">
+            <i class="fa-solid fa-gift"></i> Unwrap Gift
+          </button>
+        </div>
+      </section>
+
+      <!-- Stage 4: Confetti Cannon & Celebration -->
+      <section class="card-glass cannon-stage">
+        <div class="stage-header">
+          <span class="stage-tag"><i class="fa-solid fa-champagne-glasses"></i> Stage 4</span>
+          <h2>Blast Confetti & Fireworks</h2>
+        </div>
+
+        <div class="celebration-meter">
+          <div class="meter-text">Celebration Vibe Level</div>
+          <div class="meter-bar">
+            <div class="meter-fill" id="meter-fill" style="width: 100%;"></div>
+          </div>
+          <div class="meter-score" id="meter-score">100% MAXIMUM FUN 🎉</div>
+        </div>
+
+        <div class="stage-action dual-buttons">
+          <button class="btn btn-primary" id="blast-confetti-btn">
+            <i class="fa-solid fa-burst"></i> Launch Confetti
+          </button>
+          <button class="btn btn-outline" id="fireworks-btn">
+            <i class="fa-solid fa-fire"></i> Fireworks Show
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Photo Memories Wall -->
+    <section class="card-glass memories-section">
+      <div class="stage-header center-header">
+        <span class="stage-tag"><i class="fa-solid fa-camera-retro"></i> Cherished Memories</span>
+        <h2>Moments To Remember Forever</h2>
+      </div>
+
+      <div class="polaroid-grid">
+        <div class="polaroid">
+          <div class="polaroid-img placeholder-1">
+            <i class="fa-regular fa-face-laugh-beam"></i>
+          </div>
+          <div class="polaroid-caption">Endless Smiles</div>
+        </div>
+        <div class="polaroid">
+          <div class="polaroid-img placeholder-2">
+            <i class="fa-solid fa-mug-hot"></i>
+          </div>
+          <div class="polaroid-caption">Late Night Talks</div>
+        </div>
+        <div class="polaroid">
+          <div class="polaroid-img placeholder-3">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </div>
+          <div class="polaroid-caption">Crazy Adventures</div>
+        </div>
+        <div class="polaroid">
+          <div class="polaroid-img placeholder-4">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <div class="polaroid-caption">Pure Joy</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Made with ❤️ to celebrate your special day | <span id="current-year">2026</span></p>
+    </footer>
+  </main>
+
+  <!-- Personalization Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Personalize Celebration</h3>
+        <button class="modal-close" id="close-settings-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="input-name">Birthday Person's Name</label>
+          <input type="text" id="input-name" placeholder="e.g. Alex, Vivek, Sarah" maxlength="30">
+        </div>
+        <div class="form-group">
+          <label for="input-message">Custom Wish Message</label>
+          <textarea id="input-message" rows="3" placeholder="Write your heartfelt wish here..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" id="reset-defaults-btn">Reset Defaults</button>
+          <button class="btn btn-primary" id="save-settings-btn">Save & Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
