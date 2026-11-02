@@ -1,248 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday! 🎉🎂</title>
-  <meta name="description" content="An interactive, celebration-filled Birthday Web Application">
-  
-  <!-- Google Fonts -->
+  <title>Janamdin Mubarak Bhaiya! 🎂👑 | Special 3D Celebration</title>
+  <meta name="description"
+    content="Mere bade bhaiya ke janamdin ke liye ek khaas aur dil se banaya gaya 3D birthday celebration webapp.">
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
+
+  <!-- Google Fonts: Luxury Serif + Modern Sans + Handwritten Script -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome for Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
+  <!-- Three.js 3D Engine & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- GSAP for Smooth 3D Camera & Object Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Bootstrap 5.3.3 Framework CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Custom Luxury Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- Canvas for Confetti & Particles -->
-  <canvas id="confetti-canvas"></canvas>
 
-  <!-- Ambient Floating Balloons Background -->
-  <div class="balloon-container" id="balloon-container"></div>
-
-  <!-- Audio Control Button -->
-  <div class="music-toggle" id="music-toggle" title="Play / Pause Birthday Music">
-    <i class="fa-solid fa-volume-xmark" id="music-icon"></i>
-    <span class="music-label">Birthday Tune</span>
+  <!-- Ambient Blurred Celebration Backdrop (Floating Soft-Blur Balloons & Party Cracker Sparks) -->
+  <div class="ambient-celebration-backdrop" id="ambient-backdrop" aria-hidden="true">
+    <div class="ambient-balloon ab-1"></div>
+    <div class="ambient-balloon ab-2"></div>
+    <div class="ambient-balloon ab-3"></div>
+    <div class="ambient-balloon ab-4"></div>
+    <div class="ambient-balloon ab-5"></div>
+    <div class="ambient-balloon ab-6"></div>
+    <div class="ambient-balloon ab-7"></div>
+    <div class="ambient-balloon ab-8"></div>
+    <div class="ambient-spark as-1"></div>
+    <div class="ambient-spark as-2"></div>
+    <div class="ambient-spark as-3"></div>
+    <div class="ambient-spark as-4"></div>
+    <div class="ambient-spark as-5"></div>
+    <div class="ambient-spark as-6"></div>
+    <div class="ambient-spark as-7"></div>
+    <div class="ambient-spark as-8"></div>
+    <div class="ambient-spark as-9"></div>
+    <div class="ambient-spark as-10"></div>
   </div>
 
-  <!-- Customize Name Modal Trigger -->
-  <button class="settings-btn" id="open-settings-btn" title="Personalize Wish">
-    <i class="fa-solid fa-wand-magic-sparkles"></i> Customize
-  </button>
+  <!-- Fullscreen 3D WebGL Canvas -->
+  <div id="webgl-container"></div>
 
-  <main class="main-container">
-    <!-- Header Hero Section -->
-    <header class="hero-section">
-      <div class="badge">✨ Today is a Special Day ✨</div>
-      <h1 class="main-title">
-        Happy Birthday, <span class="highlight-name" id="display-name">Bestie</span>!
-      </h1>
-      <p class="subtitle" id="display-tagline">
-        Wishing you a year filled with endless laughter, boundless adventures, and dreams turned into reality!
+  <!-- 3D Hint Overlay, Balloon Counter & Camera Controls -->
+  <div class="scene-hint" id="scene-hint">
+    <div class="hint-text-group">
+      <i class="fa-solid fa-arrows-rotate"></i>
+      <span>Drag to explore in 3D • Click balloons to pop 🎈 • Blow out candles</span>
+      <span class="pop-badge-pill" id="pop-badge-pill"><i class="fa-solid fa-burst"></i> <span id="pop-counter">0</span>
+        Popped</span>
+    </div>
+    <div class="hint-actions-group">
+      <button class="hint-ctrl-btn" id="auto-rotate-toggle-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Toggle 360 Auto Rotation">
+        <i class="fa-solid fa-pause"></i> <span>Pause 360°</span>
+      </button>
+      <button class="hint-ctrl-btn" id="reset-camera-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset View to Cake">
+        <i class="fa-solid fa-crosshairs"></i> <span>Reset View 🎯</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Balloon Pop Reward Badge -->
+  <div class="balloon-pop-badge" id="balloon-pop-badge">
+    <div class="pop-badge-icon" id="pop-badge-icon">👑</div>
+    <div class="pop-badge-text-wrap">
+      <div class="pop-badge-tag">BALLOON POPPED!</div>
+      <div class="pop-badge-title" id="pop-badge-title">Arman • The Legend 👑</div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       TOP PINNED NAVIGATION BAR (Full Width, Structured, Luxury)
+       ======================================================== -->
+  <header class="hud-nav" id="hud-nav">
+    <div class="nav-brand">
+      <div class="brand-crest" id="nav-brand-crest" title="Arman Bhai 👑">
+        <img src="images/arman.png" alt="Arman Bhai" class="brand-dp-img" id="nav-brand-dp">
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">ARMAN BHAI</span>
+        <span class="brand-subtitle">Happy Birthday 👑</span>
+      </div>
+    </div>
+
+    <!-- Main Page Switcher Tabs -->
+    <nav class="nav-page-tabs" id="nav-page-tabs">
+      <button class="nav-tab-btn active" data-page="stage" data-bs-toggle="tooltip" data-bs-placement="bottom" title="3D Grand Celebration Stage">
+        <i class="fa-solid fa-cake-candles"></i> <span>3D Stage</span>
+      </button>
+      <button class="nav-tab-btn" data-page="awards" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Arman's Big Brother Awards">
+        <i class="fa-solid fa-trophy"></i> <span>Hall of Fame 🏆</span>
+      </button>
+      <button class="nav-tab-btn" data-page="arcade" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Birthday Mini Games for Arman">
+        <i class="fa-solid fa-gamepad"></i> <span>Bhaiya Arcade 🎮</span>
+      </button>
+    </nav>
+
+    <!-- Utility & Theme Actions -->
+    <div class="nav-actions">
+      <!-- Light Luxury Themes -->
+      <div class="nav-theme-picker" id="theme-picker-pill" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Switch Theme">
+        <button class="theme-opt-btn active" data-theme-val="ivory" title="Royal Ivory & Gold">
+          <span class="theme-dot ivory-dot"></span> <span>Ivory</span>
+        </button>
+        <button class="theme-opt-btn" data-theme-val="rose" title="Rose Pearl & White Gold">
+          <span class="theme-dot rose-dot"></span> <span>Rose</span>
+        </button>
+        <button class="theme-opt-btn" data-theme-val="mint" title="Emerald Frost & Opal">
+          <span class="theme-dot mint-dot"></span> <span>Mint</span>
+        </button>
+      </div>
+
+      <!-- Music Synthesizer Button (Autoplaying on load) -->
+      <button class="nav-btn music-btn playing" id="music-toggle-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle Birthday Melody">
+        <i class="fa-solid fa-volume-high" id="music-icon"></i>
+        <span class="nav-btn-text" id="music-status-text">Playing ♫</span>
+        <div class="sound-wave" id="sound-wave">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </button>
+
+      <!-- Khaas Sandesh Drawer Button -->
+      <button class="nav-btn" id="open-letter-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Read Special Brotherhood Letter">
+        <i class="fa-solid fa-envelope-open-text"></i>
+        <span class="nav-btn-text">Special Letter 💌</span>
+      </button>
+
+      <!-- Fireworks Blast Button -->
+      <button class="nav-btn gold-accent-btn" id="blast-fireworks-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Launch Fireworks! 🎆">
+        <i class="fa-solid fa-burst"></i>
+        <span class="nav-btn-text">Fireworks 🎆</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       ANGLED HERO TYPOGRAPHY (Left Slanted Wish, Right Name)
+       ======================================================== -->
+  <div class="hero-left-wish" id="hero-left-wish">
+
+    <div class="wish-slant">Janamdin Mubarak</div>
+  </div>
+
+  <div class="hero-right-name" id="hero-right-name">
+    <div class="name-slant-wrap">
+      <div class="name-slant" id="hero-name">ARMAN</div>
+      <span class="crown-slant">👑</span>
+    </div>
+    <div class="name-sub-slant" id="hero-title-tag">MERE BHAI • THE LEGEND 👑</div>
+  </div>
+
+  <!-- ========================================================
+       SLIDE-IN MODALS & PANELS
+       ======================================================== -->
+
+  <!-- 1. The 3D Wax-Sealed Brotherhood Letter Drawer -->
+  <div class="letter-drawer" id="letter-drawer">
+    <div class="drawer-header">
+      <div class="drawer-badge">⚜️ CHOTE BHAI KI DIL KI BAAT</div>
+      <button class="drawer-close" id="close-letter-drawer">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div class="parchment-sheet">
+        <div class="parchment-header">
+          <span class="parchment-crest">👑</span>
+          <span class="parchment-date" id="letter-current-date">November 2026</span>
+        </div>
+        <h2 class="parchment-title">Mere Pyare Bade Bhaiya, <span class="letter-bro-name" id="letter-name">Arman</span>,
+        </h2>
+        <div class="parchment-body" id="letter-body-content">
+          <p>
+            Sach bolu toh aap sirf mere bade bhai nahi ho, aap mere life ke pehle guide, mere dost aur mere sabse bade
+            supporter ho. Bachpan me meri faltu galtiyon par daant lagane se lekar, papa ke gusse se bachane tak—aapne
+            hamesha mera haath pakad kar sambhala hai.
+          </p>
+          <p>
+            Aapki mehnat, aapka sabr aur chahe kitni bhi mushkil situation ho, sab sambhal lene ka confidence mujhe har
+            din inspire karta hai. Jab bhi mujhe lagta hai ki cheezein mushkil hain, bas ye soch kar himmat aa jaati hai
+            ki mere peeche mera bada bhai khada hai.
+          </p>
+          <p>
+            Janamdin ki bohot bohot badhaiyan Arman Bhai! Bhagwan kare aapki life me sukoon, behtareen health aur wo har
+            badi kamyabi mile jiske aap haqdaar ho. Chahe zindagi me kitne bhi utaar-chadhaav aayein, yaad rakhna aapka
+            ye chota bhai hamesha aapke sath khada milega.
+          </p>
+        </div>
+        <div class="parchment-footer">
+          <p class="sign-note">Dil se izzat aur hamesha ke sath ke sath,</p>
+          <div class="handwritten-sig" id="letter-signature">Aapka Chota Bhai</div>
+        </div>
+      </div>
+      <div class="drawer-actions">
+        <button class="action-btn gold-btn" id="drawer-heart-btn">
+          <i class="fa-solid fa-heart"></i> <span>Love You Arman Bhai ❤️</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Dynamic Toast Quote Notification Card -->
+  <div class="toast-card-overlay" id="toast-card-overlay">
+    <div class="toast-card-inner">
+      <div class="toast-card-crest">🥂</div>
+      <div class="toast-card-title">Arman Ke Naam Ek Jam</div>
+      <p class="toast-card-quote" id="toast-card-quote">
+        “Arman bhai ke naam ek jaam! Jinhone har mushkil waqt me mera haath thama aur mujhe ladna sikhaya. Aap hamesha
+        haste raho aur kamyabi ke naye records banao! Cheers Arman! 🥂”
       </p>
-    </header>
-
-    <!-- Celebration Stages Grid -->
-    <div class="stages-grid">
-      
-      <!-- Stage 1: Interactive Birthday Cake -->
-      <section class="card-glass cake-stage">
-        <div class="stage-header">
-          <span class="stage-tag"><i class="fa-solid fa-cake-candles"></i> Stage 1</span>
-          <h2>Make a Wish & Blow the Candles</h2>
-        </div>
-        
-        <div class="cake-container" id="cake">
-          <div class="plate"></div>
-          <div class="layer layer-bottom"></div>
-          <div class="layer layer-middle"></div>
-          <div class="layer layer-top">
-            <div class="frosting"></div>
-          </div>
-          <div class="candles-wrap">
-            <div class="candle" data-lit="true">
-              <div class="flame"></div>
-            </div>
-            <div class="candle" data-lit="true">
-              <div class="flame"></div>
-            </div>
-            <div class="candle" data-lit="true">
-              <div class="flame"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="stage-action">
-          <button class="btn btn-primary" id="blow-candles-btn">
-            <i class="fa-solid fa-wind"></i> Blow Out Candles
-          </button>
-          <p class="hint-text">Click the button or click directly on the flames!</p>
-        </div>
-      </section>
-
-      <!-- Stage 2: Interactive 3D Greeting Card -->
-      <section class="card-glass card-stage">
-        <div class="stage-header">
-          <span class="stage-tag"><i class="fa-solid fa-envelope-open-text"></i> Stage 2</span>
-          <h2>Open Your Birthday Card</h2>
-        </div>
-
-        <div class="birthday-card-wrapper" id="card-wrapper">
-          <div class="birthday-card" id="birthday-card">
-            <!-- Front of the Card -->
-            <div class="card-front">
-              <div class="card-front-content">
-                <i class="fa-solid fa-gift card-icon"></i>
-                <h3>For You</h3>
-                <p>Click to open card</p>
-                <div class="ribbon-decor">🎀</div>
-              </div>
-            </div>
-            <!-- Inside of the Card -->
-            <div class="card-inside">
-              <div class="card-inside-content">
-                <h3>Dear <span class="card-inside-name">Friend</span>,</h3>
-                <p id="card-message">
-                  On this joyful day, may your heart be as light as a balloon and your smiles as sweet as cake. Thank you for bringing so much light and positive energy into our lives!
-                </p>
-                <div class="card-signature">
-                  <span>With lots of love,</span>
-                  <strong>❤️ Your Friends & Family</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="stage-action">
-          <button class="btn btn-outline" id="toggle-card-btn">
-            <i class="fa-solid fa-envelope"></i> Open / Close Card
-          </button>
-        </div>
-      </section>
-
-      <!-- Stage 3: Mystery Gift Box -->
-      <section class="card-glass gift-stage">
-        <div class="stage-header">
-          <span class="stage-tag"><i class="fa-solid fa-box-open"></i> Stage 3</span>
-          <h2>Unwrap Your Birthday Surprise</h2>
-        </div>
-
-        <div class="gift-box-container" id="gift-box">
-          <div class="gift-lid">
-            <div class="gift-bow"></div>
-          </div>
-          <div class="gift-body"></div>
-          <div class="gift-surprise" id="gift-surprise">
-            <div class="surprise-icon">🎁</div>
-            <h4>Surprise Unlocked!</h4>
-            <p>100x Happiness & Unlimited Good Vibes Guaranteed for this entire year!</p>
-          </div>
-        </div>
-
-        <div class="stage-action">
-          <button class="btn btn-secondary" id="open-gift-btn">
-            <i class="fa-solid fa-gift"></i> Unwrap Gift
-          </button>
-        </div>
-      </section>
-
-      <!-- Stage 4: Confetti Cannon & Celebration -->
-      <section class="card-glass cannon-stage">
-        <div class="stage-header">
-          <span class="stage-tag"><i class="fa-solid fa-champagne-glasses"></i> Stage 4</span>
-          <h2>Blast Confetti & Fireworks</h2>
-        </div>
-
-        <div class="celebration-meter">
-          <div class="meter-text">Celebration Vibe Level</div>
-          <div class="meter-bar">
-            <div class="meter-fill" id="meter-fill" style="width: 100%;"></div>
-          </div>
-          <div class="meter-score" id="meter-score">100% MAXIMUM FUN 🎉</div>
-        </div>
-
-        <div class="stage-action dual-buttons">
-          <button class="btn btn-primary" id="blast-confetti-btn">
-            <i class="fa-solid fa-burst"></i> Launch Confetti
-          </button>
-          <button class="btn btn-outline" id="fireworks-btn">
-            <i class="fa-solid fa-fire"></i> Fireworks Show
-          </button>
-        </div>
-      </section>
-
+      <div class="toast-count-pill"><span id="toast-counter">1</span> Baar Cheers Kiya</div>
     </div>
+  </div>
 
-    <!-- Photo Memories Wall -->
-    <section class="card-glass memories-section">
-      <div class="stage-header center-header">
-        <span class="stage-tag"><i class="fa-solid fa-camera-retro"></i> Cherished Memories</span>
-        <h2>Moments To Remember Forever</h2>
-      </div>
-
-      <div class="polaroid-grid">
-        <div class="polaroid">
-          <div class="polaroid-img placeholder-1">
-            <i class="fa-regular fa-face-laugh-beam"></i>
-          </div>
-          <div class="polaroid-caption">Endless Smiles</div>
+  <!-- 5. 3D Poster Lightbox Zoom Modal (Click to Enlarge / Click to Close) -->
+  <div class="poster-lightbox-overlay" id="poster-lightbox-overlay" aria-hidden="true">
+    <div class="lightbox-dialog" id="lightbox-dialog">
+      <button class="lightbox-close-btn" id="close-lightbox-btn" title="Close">&times;</button>
+      <div class="lightbox-polaroid" id="lightbox-polaroid">
+        <div class="lightbox-photo-wrap">
+          <img id="lightbox-img" src="images/photo.jpg" alt="Arman Birthday Photo" class="lightbox-img">
         </div>
-        <div class="polaroid">
-          <div class="polaroid-img placeholder-2">
-            <i class="fa-solid fa-mug-hot"></i>
-          </div>
-          <div class="polaroid-caption">Late Night Talks</div>
-        </div>
-        <div class="polaroid">
-          <div class="polaroid-img placeholder-3">
-            <i class="fa-solid fa-mountain-sun"></i>
-          </div>
-          <div class="polaroid-caption">Crazy Adventures</div>
-        </div>
-        <div class="polaroid">
-          <div class="polaroid-img placeholder-4">
-            <i class="fa-solid fa-heart"></i>
-          </div>
-          <div class="polaroid-caption">Pure Joy</div>
+        <div class="lightbox-footer">
+          <div class="lightbox-title-text" id="lightbox-title">Arman • The Legend 👑</div>
+          <div class="lightbox-sub-text" id="lightbox-sub">Janamdin Mubarak Bhai • Hamesha Sath 🥂</div>
         </div>
       </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <p>Made with ❤️ to celebrate your special day | <span id="current-year">2026</span></p>
-    </footer>
-  </main>
-
-  <!-- Personalization Modal -->
-  <div class="modal-overlay" id="settings-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Personalize Celebration</h3>
-        <button class="modal-close" id="close-settings-btn">&times;</button>
+      <div class="lightbox-btn-row">
+        <button class="action-btn subtle-btn" id="lightbox-close-action-btn">
+          <i class="fa-solid fa-xmark"></i> <span>Back to 3D ✕</span>
+        </button>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="input-name">Birthday Person's Name</label>
-          <input type="text" id="input-name" placeholder="e.g. Alex, Vivek, Sarah" maxlength="30">
+    </div>
+  </div>
+
+  <!-- ========================================================
+       PAGE 1: ARMAN BHAI'S HALL OF FAME (BIG BROTHER AWARDS)
+       ======================================================== -->
+  <div class="page-view-overlay" id="page-hall-of-fame">
+    <div class="page-inner-container">
+      <div class="page-header-banner">
+        <div class="page-header-crest">🏆</div>
+        <h1 class="page-header-title">Arman Bhai's Hall of Fame</h1>
+        <p class="page-header-sub">
+          Duniya ke sabse supportive, fearless aur caring bade bhai ke naam official honors & trophies!
+        </p>
+      </div>
+
+      <div class="awards-grid">
+        <!-- Award 1 -->
+        <div class="award-card" data-award-id="1">
+          <div class="award-card-header">
+            <div class="award-icon-box">👑</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Lifetime Honor</span>
+              <h3 class="award-title">The Undisputed King of the House</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Chahe family ka koi bhi bada faisla ho ya koi musibat, sabse pehle aage aakar sab sambhal lene ka taj sirf
+            Arman bhaiya ke sar sajta hai.
+          </p>
+          <div class="award-quote-box">
+            “Ghar ka asli pillar, jinka hona hi sabse badi himmat hai.”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Nominated by Chhota Bhai</span>
+            <button class="award-claim-btn" data-award-name="The Undisputed King">
+              <i class="fa-solid fa-medal"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="input-message">Custom Wish Message</label>
-          <textarea id="input-message" rows="3" placeholder="Write your heartfelt wish here..."></textarea>
+
+        <!-- Award 2 -->
+        <div class="award-card" data-award-id="2">
+          <div class="award-card-header">
+            <div class="award-icon-box">🛡️</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Valor & Protection</span>
+              <h3 class="award-title">The 24/7 Brotherhood Shield</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Bachpan me papa ke gusse se bachane se lekar, bahar ki har pareshani me meri deewar ban kar khade rehne ka
+            unconditional record!
+          </p>
+          <div class="award-quote-box">
+            “Jab tak bada bhai peeche khada hai, duniya me kisi ka darr nahi!”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Unmatched Protection</span>
+            <button class="award-claim-btn" data-award-name="The 24/7 Shield">
+              <i class="fa-solid fa-shield-halved"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
         </div>
-        <div class="form-actions">
-          <button class="btn btn-outline" id="reset-defaults-btn">Reset Defaults</button>
-          <button class="btn btn-primary" id="save-settings-btn">Save & Update</button>
+
+        <!-- Award 3 -->
+        <div class="award-card" data-award-id="3">
+          <div class="award-card-header">
+            <div class="award-icon-box">⚡</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Inspiration & Hustle</span>
+              <h3 class="award-title">The Relentless Hustler & Role Model</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Aapki mehnat, aapka patience aur chahe kitni bhi mushkil situation ho haar na manne ka jazba mujhe har din
+            inspire karta hai.
+          </p>
+          <div class="award-quote-box">
+            “Mehnat aisi ki kismat bhi salaam kare—Day-One Inspiration!”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Daily Motivation</span>
+            <button class="award-claim-btn" data-award-name="The Relentless Hustler">
+              <i class="fa-solid fa-bolt"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Award 4 -->
+        <div class="award-card" data-award-id="4">
+          <div class="award-card-header">
+            <div class="award-icon-box">🎮</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Partnership</span>
+              <h3 class="award-title">Partner In Crime Since Day One</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Bachpan ke funny fights, chupke se plans banana, late night talks aur har shararat me barabar ke hissedar
+            hone ka record!
+          </p>
+          <div class="award-quote-box">
+            “Brotherhood isn't just family, it's the greatest co-op team!”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Childhood Memories</span>
+            <button class="award-claim-btn" data-award-name="Partner In Crime">
+              <i class="fa-solid fa-gamepad"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Award 5 -->
+        <div class="award-card" data-award-id="5">
+          <div class="award-card-header">
+            <div class="award-icon-box">💸</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Generosity</span>
+              <h3 class="award-title">Official Sponsor & Pocket-Money Savior</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Jab bhi pocket money khatam hui ya kuch kharidne ka man kiya, bina kisi sawal ke hamesha treat dene wale
+            hamare Arman Bhai!
+          </p>
+          <div class="award-quote-box">
+            “Bhaiya ka dil bank se bhi bada hai—Unlimited Generosity!”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Golden Heart</span>
+            <button class="award-claim-btn" data-award-name="Pocket-Money Savior">
+              <i class="fa-solid fa-hand-holding-dollar"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Award 6 -->
+        <div class="award-card" data-award-id="6">
+          <div class="award-card-header">
+            <div class="award-icon-box">❤️</div>
+            <div class="award-card-title-group">
+              <span class="award-category">Ultimate Title</span>
+              <h3 class="award-title">World's Greatest Big Brother</h3>
+            </div>
+          </div>
+          <p class="award-citation">
+            Zindagi me lakho log milenge, par Arman jaisa bhai kismat se milta hai. Aap hamesha haste raho, aage badhte
+            raho aur hamesha aise hi raho!
+          </p>
+          <div class="award-quote-box">
+            “Bhaiya, aapke jaisa na koi tha, na koi hai, na koi hoga!”
+          </div>
+          <div class="award-card-footer">
+            <span class="award-category">Forever #1</span>
+            <button class="award-claim-btn" data-award-name="World's Greatest Brother">
+              <i class="fa-solid fa-heart"></i> <span>Claim Award 🏆</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- ========================================================
+       PAGE 2: BHAIYA'S BIRTHDAY ARCADE (MINI GAMES)
+       ======================================================== -->
+  <div class="page-view-overlay" id="page-arcade">
+    <div class="page-inner-container">
+      <div class="page-header-banner">
+        <div class="page-header-crest">🎮</div>
+        <h1 class="page-header-title">Bhaiya's Birthday Arcade</h1>
+        <p class="page-header-sub">
+          Arman bhai ke liye special birthday mini games! Kheliye, maze lijiye aur apne chhota bhai se treats jeetiye!
+        </p>
+      </div>
+
+      <!-- Arcade Sub-navigation -->
+      <div class="arcade-subnav">
+        <button class="arcade-tab-btn active" data-game-target="balloon">
+          <i class="fa-solid fa-burst"></i> <span>Balloon Pop Blitz 🎈</span>
+        </button>
+        <button class="arcade-tab-btn" data-game-target="wheel">
+          <i class="fa-solid fa-dharmachakra"></i> <span>Brotherhood Treat Wheel 🎰</span>
+        </button>
+      </div>
+
+      <!-- Game 1: Balloon Pop Blitz -->
+      <div class="game-panel active" id="game-panel-balloon">
+        <div class="balloon-game-box">
+          <div class="balloon-game-hud">
+            <div class="hud-stat-pill">Score: <span id="game-score">0</span></div>
+            <div class="hud-stat-pill">Time: <span id="game-timer">30</span>s</div>
+            <div class="hud-stat-pill">Combo: <span id="game-combo">x1</span></div>
+            <button class="action-btn gold-btn" id="start-balloon-game-btn"
+              style="padding: 7px 18px; font-size: 0.85rem;">
+              <i class="fa-solid fa-play"></i> <span>Start Challenge</span>
+            </button>
+          </div>
+          <div class="balloon-playfield" id="balloon-playfield">
+            <div class="balloon-start-screen" id="balloon-start-screen">
+              <div style="font-size: 3.2rem;">🎈💥</div>
+              <h3
+                style="font-family: var(--font-serif); font-size: 1.55rem; color: var(--text-primary); margin-bottom: 6px;">
+                Balloon Pop Blitz Challenge
+              </h3>
+              <p style="color: var(--text-secondary); max-width: 440px; font-size: 0.92rem; line-height: 1.5;">
+                30 seconds me jitne zyada balloons phod sakte ho phodo! Golden Crown balloons se +50 bonus points
+                milenge!
+              </p>
+              <button class="action-btn gold-btn" id="start-balloon-game-overlay-btn"
+                style="padding: 12px 32px; font-size: 1.05rem; margin-top: 8px;">
+                <i class="fa-solid fa-fire"></i> Start Playing! 🚀
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 2: Brotherhood Treat Wheel -->
+      <div class="game-panel" id="game-panel-wheel">
+        <div class="wheel-game-box">
+          <h2
+            style="font-family: var(--font-serif); font-size: 1.65rem; color: var(--text-primary); margin-bottom: 6px;">
+            Bhaiya's Lucky Spin 🎰
+          </h2>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 24px;">
+            Spin the wheel and discover your special treat! 100% win guaranteed on every spin!
+          </p>
+
+          <div class="wheel-stage-wrap">
+            <div class="wheel-pointer"></div>
+            <canvas id="treat-wheel-canvas" width="360" height="360"></canvas>
+            <div class="wheel-center-crest">👑</div>
+          </div>
+
+          <button class="spin-wheel-btn" id="spin-wheel-btn">
+            <i class="fa-solid fa-rotate-right"></i> <span>Spin Wheel 🎲</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Treat Voucher Modal -->
+  <div class="voucher-overlay" id="voucher-overlay">
+    <div class="voucher-card">
+      <div class="voucher-seal">🎁</div>
+      <div class="voucher-ribbon-title">OFFICIAL BROTHERHOOD TREAT VOUCHER</div>
+      <div class="voucher-prize-text" id="voucher-prize-name">Favorite Brother Treat! 🍕</div>
+      <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 22px; line-height: 1.5;">
+        Congratulations Arman Bhai! Your brother is ready to fulfill this treat anytime! ❤️
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="action-btn gold-btn" id="claim-voucher-btn" style="padding: 10px 24px;">
+          <i class="fa-solid fa-circle-check"></i> Accept Voucher! 🤝
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="toast-pill" id="app-toast-pill">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toast-pill-message">Link copy ho gaya! Bhaiya ko WhatsApp par bhej do!</span>
+  </div>
+
+  <!-- Bootstrap 5.3.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="script.js"></script>
 </body>
+
 </html>

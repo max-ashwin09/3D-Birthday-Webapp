@@ -1,7 +1,10 @@
-# 🎉 Birthday Webapp 🎂✨
+# 👑 Bade Bhaiya 3D Birthday Webapp — Special Edition 🎂✨
 
-A delightful, modern, and interactive Birthday Web Application designed to celebrate special days with joy, animations, music, and interactive surprises!
+Ek interactive, full 3D WebGL birthday celebration web application jo Three.js aur GSAP se banayi gayi hai, khaaskar **Bade Bhai (Bhaiya)** ke janamdin ko memorable banane ke liye.
 
+Saare texts aur messages pure **Hinglish** me hain jo ekdum genuine, dil se likhe hue aur real sibling bond ko darshate hain—bina kisi robotic ya AI feel ke.
+
+[![Three.js](https://img.shields.io/badge/Three.js-000000?style=flat&logo=three.js&logoColor=white)](https://threejs.org/)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
@@ -9,84 +12,43 @@ A delightful, modern, and interactive Birthday Web Application designed to celeb
 
 ---
 
-## ✨ Features
+## ✨ Features Crafted for Bade Bhai
 
-- 🎂 **Interactive Birthday Cake & Candles**: Blow out candles with a click or tap, complete with smoke animations, cheers, and confetti explosions. Re-light them anytime!
-- 💌 **3D Interactive Greeting Card**: Click to unfold a 3D greeting card with a personalized birthday message and signature.
-- 🎁 **Mystery Gift Box Unboxing**: Pop open the gift box to unlock special surprises and heartfelt wishes.
-- 🎶 **Synthesized Birthday Melody**: Built-in Web Audio API synthesizer that plays the *"Happy Birthday to You"* tune on demand without needing external MP3s.
-- 🎊 **Confetti & Fireworks Particle Engine**: High-performance HTML5 Canvas physics engine powering confetti blasts, hearts, and fireworks.
-- 🎈 **Ambient Floating Balloons**: Colorful, soothing background balloons gently floating upwards.
-- 🪄 **Dynamic Personalization**:
-  - Customize the recipient's name and message via the **Customize Modal**.
-  - Or share customized links using URL parameters:
-    ```
-    https://your-domain.com/?name=Alex&msg=Wishing+you+the+best+year+ahead!
-    ```
-- 📸 **Polaroid Memories Wall**: Aesthetic retro polaroid gallery showcasing favorite memories.
-- 📱 **Fully Responsive & Glassmorphism Design**: Looks stunning on smartphones, tablets, and desktop displays.
+- 🎂 **Interactive 3D Birthday Cake & Candles**:
+  - Luxury multi-tier cake aur 5 dynamic flickering candles.
+  - Candles par click karke ya dock button se blow out karein, smoke & fireworks trigger honge aur Bhaiya ke liye dua rab se lock hogi.
+  - Candles ko kabhi bhi phir se jalayein!
+- 🎁 **3 Interactive 3D Surprise Gift Boxes**:
+  - Teen khaas gift boxes jo Bhaiya ke liye khulte hain:
+    1. **Gift 1**: *Hamesha Ka Stand & Full Support (Life-long Backup Pass)*
+    2. **Gift 2**: *Late Night Treat & Chai Card (Unlimited Chai & Party Pass)*
+    3. **Top Gift**: *Duniya Ke Best Bhaiya Ka Khitab (Supreme Elder Brother Trophy)*
+  - 3D lid open animation, aatishbazi aur natural sibling rewards.
+- 🥂 **3D Toast & Cheers with Crystal Glasses**:
+  - Faceted glasses aapas me clink karte hain, realistic glass chime sound aati hai aur Bhaiya ke liye genuine toast quotes aate hain.
+- 🎈 **Interactive 3D Balloons Pop Game**:
+  - Floating 3D metallic balloons jinhe pop karne par fun Hinglish rewards unlock hote hain (*"Bhaiya Ka Tashan No. 1!"*, *"World Best Big Brother!"*, *"Bhaiya Ke Sath Kadak Chai!"*).
+- 📜 **Bhaiya Ke Liye Khaas Chitthi (3D Parchment Drawer)**:
+  - Ekdum dil se likha hua sandesh jo bade bhai ke support, unke guide karne aur chote bhai ke unconditional pyaar ko bayaan karta hai.
+- 📸 **3D Memory Orbit Gallery**:
+  - 3D space me ghumti hui photo frames jisme aap apne phone ya laptop se Bhaiya ke sath ki photo daal sakte hain.
+- 🎵 **Web Audio API Melody Synthesizer**:
+  - Bina kisi external audio file ke smooth Birthday melody chalti hai.
+- 📲 **1-Click WhatsApp & URL Sharing**:
+  - Pre-formatted WhatsApp message aur link generate hota hai jo direct Bhaiya ko send kiya ja sakta hai.
 
 ---
 
-## 🚀 Quick Start / Local Preview
+## 🚀 Running the Webapp Locally
 
-No heavy installation or build steps required! Run it with any local server or simply open `index.html` in your favorite web browser.
+Local server port 8000 par run ho raha hai:
+👉 **`http://localhost:8000`**
 
-### Option 1: Double-click to open
-Simply double-click `index.html` in your file explorer.
-
-### Option 2: Using Node / npx (Recommended)
+Agar dobara start karna ho:
 ```bash
-# Using serve
-npx serve .
-
-# Or using http-server
-npx http-server -p 3000
-```
-
-### Option 3: Using Python
-```bash
-# Python 3
 python3 -m http.server 8000
 ```
-Then open `http://localhost:8000` in your browser.
-
----
-
-## 📁 Project Structure
-
-```text
-Birthday_Webapp/
-├── index.html        # Main HTML structure & semantic layout
-├── style.css         # Glassmorphism styling, keyframes & responsive design
-├── script.js         # Interactive physics, Web Audio synth, events & logic
-├── .gitignore        # Git ignore rules for system & node artifacts
-├── LICENSE           # MIT open source license
-└── README.md         # Comprehensive project documentation
-```
-
----
-
-## 🌐 Deploy to GitHub Pages (1-Click Hosting)
-
-1. Push this repository to your GitHub account:
-   ```bash
-   git remote add origin https://github.com/<your-username>/Birthday_Webapp.git
-   git branch -M main
-   git push -u origin main
-   ```
-2. On GitHub, go to your repository **Settings** > **Pages**.
-3. Under **Build and deployment** > **Source**, choose **Deploy from a branch**.
-4. Select `main` branch and `/ (root)` folder, then click **Save**.
-5. Your birthday webapp will be live at `https://<your-username>.github.io/Birthday_Webapp/`!
-
----
-
-## 🎨 Customization
-
-- **Change Default Name & Message**: Update `defaultData` in [script.js](file:///Volumes/volume/Projects/Birthday_Webapp/script.js).
-- **Add Your Own Photos**: Replace the `.polaroid-img` background or add `<img>` tags inside `.polaroid` divs in [index.html](file:///Volumes/volume/Projects/Birthday_Webapp/index.html).
-- **Color Palette**: Modify CSS variables in `:root` inside [style.css](file:///Volumes/volume/Projects/Birthday_Webapp/style.css).
+Phir apne web browser me `http://localhost:8000` kholein.
 
 ---
 
