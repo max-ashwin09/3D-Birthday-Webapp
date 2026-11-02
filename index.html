@@ -3,7 +3,36 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
+  <script>
+    // Force Full Desktop Mode by default on Android & Mobile phones
+    (function () {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        var desktopWidth = 1200;
+        var screenW = window.screen.width || window.innerWidth || 390;
+        var initialScale = screenW / desktopWidth;
+        var meta = document.getElementById('viewport-meta');
+        if (meta) {
+          meta.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + initialScale + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes');
+        }
+      }
+    })();
+    window.addEventListener('orientationchange', function () {
+      setTimeout(function () {
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+          var desktopWidth = 1200;
+          var screenW = window.screen.width || window.innerWidth || 390;
+          var initialScale = screenW / desktopWidth;
+          var meta = document.getElementById('viewport-meta');
+          if (meta) {
+            meta.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + initialScale + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes');
+          }
+        }
+      }, 200);
+    });
+  </script>
   <title>Janamdin Mubarak Bhaiya! 🎂👑 | Special 3D Celebration</title>
   <meta name="description"
     content="Mere bade bhaiya ke janamdin ke liye ek khaas aur dil se banaya gaya 3D birthday celebration webapp.">
